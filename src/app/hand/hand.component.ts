@@ -7,9 +7,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HandComponent implements OnInit {
 
+  
+
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  private dealHand(): void {
+    // 
   }
 
 }
