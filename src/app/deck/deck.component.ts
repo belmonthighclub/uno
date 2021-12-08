@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { BoardComponent } from '../board/board.component';
+import { AIPlayer } from './AIPlayer';
 import { Card } from './card';
 import { CardColor } from './card-color';
 import { CardRarity } from './card-rarity';
+import { Hand } from './hand';
+import { HumanPlayer } from './HumanPlayer';
 
 @Component({
   selector: 'app-deck',
@@ -19,16 +23,45 @@ export class DeckComponent implements OnInit {
     [CardRarity.WILD, [CardColor.SPECIAL], 4],
   ]
 
-  public cards: Array<Card> = new Array; 
+  public cards: Array<Card> = new Array;
+  public ais: Array<AIPlayer> = new Array;
+  public human: HumanPlayer = undefined;
+  public board: BoardComponent;
 
-  constructor() {  
+  constructor(board: BoardComponent) {  
+    this.board = board;
     this.cards = this.createDeck();
-
-    console.log(this.cards);
-    console.log(this.cards[0]);
   }
 
   ngOnInit(): void {
+
+  }
+
+  public createHand(size: number, isPlayer: boolean): Hand {
+    let hand: Hand;
+    let handCards: Array<Card> = new Array;
+
+    for (let index = 0; index <= size - 1; index++) {
+      let card = this.drawCard();
+      if(card === undefined) return undefined;
+      handCards.push(card);
+    }
+    hand = new Hand(handCards, this.board);
+    
+    if(isPlayer){
+      hand.isHuman = true;
+      this.human = new HumanPlayer(hand);
+    }
+    else{
+      hand.isHuman = false;
+      this.ais.push(new AIPlayer(hand));
+    }
+    
+    handCards.forEach(function(card: Card){
+      card.hand = hand;
+    })
+
+    return hand;
   }
 
   public createDeck(): Array<Card>{
@@ -42,7 +75,7 @@ export class DeckComponent implements OnInit {
       }
     })
 
-    return this.shuffle(this.shuffle(cardDeck));
+    return this.shuffle(cardDeck);
   }
 
   public shuffle(array: Array<any>) {
@@ -55,5 +88,17 @@ export class DeckComponent implements OnInit {
       array[randomIndex] = temporaryValue;
     }
     return array;
+  }
+
+  public drawCard(): Card {
+    return this.cards.pop();
+  }
+
+  public updateHands(){
+    if(this.human.hand !== undefined) this.human.hand.update();
+    
+    this.ais.forEach(function(element: AIPlayer){
+        if(element.hand !== undefined) element.hand.update();
+    });
   }
 }
