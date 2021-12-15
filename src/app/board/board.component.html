@@ -1,1 +1,10 @@
 <p>board works!</p>
+<p>{{playerAmount}}</p>
+<div class="activeCard">
+    <img [src]="activeCardImageString" alt="" width="64" height="64">
+</div>
+<div class="ai-hand">
+    <div *ngFor="let card of deck.ais[0].hand.cards">
+        <img  [src]="card.cardString" alt="" width="64" height="64">
+    </div>
+</div>

@@ -1,23 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { BoardComponent } from '../board/board.component';
-import { AIPlayer } from './AIPlayer';
+import { AIPlayer } from './aiPlayer';
 import { Card } from './card';
 import { CardColor } from './card-color';
 import { CardRarity } from './card-rarity';
 import { Hand } from './hand';
-import { HumanPlayer } from './HumanPlayer';
+import { HumanPlayer } from './humanPlayer';
 
-@Component({
-  selector: 'app-deck',
-  templateUrl: './deck.component.html',
-  styleUrls: ['./deck.component.css']
-})
-export class DeckComponent implements OnInit {
+export class Deck {
 
   public staticCards: Array<[CardRarity, Array<CardColor>, number]> = [
     [CardRarity.NORMAL, [CardColor.GREEN, CardColor.RED, CardColor.YELLOW, CardColor.BLUE], 19],
-    [CardRarity.REVERSE, [CardColor.GREEN, CardColor.RED, CardColor.YELLOW, CardColor.BLUE], 2],
     [CardRarity.DRAW_TWO, [CardColor.GREEN, CardColor.RED, CardColor.YELLOW, CardColor.BLUE], 2],
+    [CardRarity.REVERSE, [CardColor.GREEN, CardColor.RED, CardColor.YELLOW, CardColor.BLUE], 2],
     [CardRarity.SKIP, [CardColor.GREEN, CardColor.RED, CardColor.YELLOW, CardColor.BLUE], 2],
     [CardRarity.DRAW_FOUR_WILD, [CardColor.SPECIAL], 4],
     [CardRarity.WILD, [CardColor.SPECIAL], 4],
@@ -33,19 +28,16 @@ export class DeckComponent implements OnInit {
     this.cards = this.createDeck();
   }
 
-  ngOnInit(): void {
-
-  }
-
   public createHand(size: number, isPlayer: boolean): Hand {
     let hand: Hand;
     let handCards: Array<Card> = new Array;
 
-    for (let index = 0; index <= size - 1; index++) {
+    for (let index = 0; index < size; index++) {
       let card = this.drawCard();
       if(card === undefined) return undefined;
       handCards.push(card);
     }
+    
     hand = new Hand(handCards, this.board);
     
     if(isPlayer){
@@ -75,7 +67,9 @@ export class DeckComponent implements OnInit {
       }
     })
 
-    return this.shuffle(cardDeck);
+    cardDeck = this.shuffle(cardDeck);
+
+    return cardDeck;
   }
 
   public shuffle(array: Array<any>) {

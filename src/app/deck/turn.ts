@@ -1,7 +1,7 @@
 import { Player } from "./player";
 
 export class Turn {
-    player: Player;
+    public player: Player;
     players: Array<Player>;
     currentPlayerID: number;
     totalTimesRun: number = 0;

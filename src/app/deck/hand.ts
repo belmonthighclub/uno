@@ -41,10 +41,7 @@ export class Hand {
         for (let index = 0; index < this.cards.length; index++) {
             let card: Card = this.cards[index];
             if(card.cardRarity == CardRarity.WILD || card.cardRarity == CardRarity.DRAW_FOUR_WILD) this.useableCards.push(card);
-            else if(card.cardRarity == CardRarity.DRAW_TWO || card.cardRarity == CardRarity.REVERSE || card.cardRarity == CardRarity.SKIP){
-                if(this.activeCard.cardRarity == card.cardRarity || this.activeCard.cardColor == card.cardColor) this.useableCards.push(card);
-            }
-            else if(card.cardRarity == CardRarity.NORMAL){
+            else if(card.cardRarity == CardRarity.DRAW_TWO || card.cardRarity == CardRarity.REVERSE || card.cardRarity == CardRarity.SKIP || card.cardRarity == CardRarity.NORMAL){
                 if(this.activeCard.cardColor == card.cardColor) this.useableCards.push(card);
             }
         }
